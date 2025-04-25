@@ -138,3 +138,13 @@ export interface TradeHistory {
   total_volume: number;
   average_price: number;
 }
+
+export interface GetBuyOrdersSummary {
+  price_bid: number;
+  total_available_contracts: number;
+}
+
+export interface GetSellOrdersSummary {
+  price_asked: number;
+  total_available_contracts: number;
+}

@@ -6,7 +6,6 @@ import {
   Contracts,
   ContractSellOrder,
   LastTradePrice,
-  LastTradePrice100,
   LastTradePriceWith7DaysChange,
 } from '@/lib/types';
 import {
@@ -23,12 +22,11 @@ import { ContractsList } from '@/components/page/ContractsList';
 import { HistoricalData } from '@/components/page/HistoricalData';
 import { Orders } from '@/components/page/Orders';
 import { SelectedContractDetails } from '@/components/page/SelectedContractDetails';
-import { Card } from '@/components/ui/card';
+import { BuySell } from '@/components/page/BuySell';
 
 export default function Home() {
   const [contracts, setContracts] = useState<Contracts[]>([]);
   const [lastTradePrices, setLastTradePrices] = useState<Record<number, LastTradePrice>>({});
-  const [lastTradePricesX100, setLastTradePricesX100] = useState<LastTradePrice100[]>([]);
   const [lastTradePricesWith7DaysChange, setLastTradePricesWith7DaysChange] = useState<
     Record<number, LastTradePriceWith7DaysChange>
   >({});
@@ -84,15 +82,12 @@ export default function Home() {
       if (selectedContractId) {
         try {
           setIsLoadingHistoricalData(true);
-          const prices = await fetchLastTradePricesX100(selectedContractId);
-          setLastTradePricesX100(prices);
+          await fetchLastTradePricesX100(selectedContractId);
         } catch (error) {
           console.error('Failed to fetch historical prices:', error);
         } finally {
           setIsLoadingHistoricalData(false);
         }
-      } else {
-        setLastTradePricesX100([]);
       }
     };
 
@@ -151,14 +146,10 @@ export default function Home() {
           />
           <div className="grid grid-cols-2 gap-4">
             <HistoricalData
-              lastTradePricesX100={lastTradePricesX100}
               isLoadingHistoricalData={isLoadingHistoricalData}
               selectedContractId={selectedContractId}
             />
-            <Card className="p-4">
-              <h2 className="text-lg font-semibold mb-4">Buy/Sell</h2>
-              {/* Buy/Sell content will go here */}
-            </Card>
+            <BuySell contractId={selectedContractId || 0} selectedUserId={selectedUserId} />
           </div>
           <Orders
             buyOrders={buyOrders}
