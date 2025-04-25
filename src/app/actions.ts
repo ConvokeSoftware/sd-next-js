@@ -8,6 +8,7 @@ import {
   getContracts,
   getContractBuyOrders,
   getContractSellOrders,
+  getAllUsers,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -17,6 +18,7 @@ import {
   Contracts,
   ContractBuyOrder,
   ContractSellOrder,
+  User,
 } from '@/lib/types';
 
 export async function fetchNFLContracts(): Promise<NFLWinContract[]> {
@@ -48,4 +50,8 @@ export async function fetchContractBuyOrders(contractId: number): Promise<Contra
 
 export async function fetchContractSellOrders(contractId: number): Promise<ContractSellOrder[]> {
   return await getContractSellOrders(contractId);
+}
+
+export async function fetchAllUsers(): Promise<User[]> {
+  return await getAllUsers();
 }

@@ -7,6 +7,7 @@ import {
   Contracts,
   ContractBuyOrder,
   ContractSellOrder,
+  User,
 } from './types';
 
 // Utility function to fetch NFL win contract IDs
@@ -90,6 +91,17 @@ export async function getContractSellOrders(contractId: number): Promise<Contrac
       WHERE contract_id = ${contractId}
     `;
     return result as ContractSellOrder[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getAllUsers(): Promise<User[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM users
+    `;
+    return result as User[];
   } catch (error) {
     handleDatabaseError(error);
   }
