@@ -1,42 +1,96 @@
-import { sql } from './db';
+import { sql, handleDatabaseError } from './db';
+import {
+  NFLWinContract,
+  LastTradePrice,
+  LastTradePrice100,
+  LastTradePriceWith7DaysChange,
+  Contracts,
+  ContractBuyOrder,
+  ContractSellOrder,
+} from './types';
 
-type QueryResult = {
-  rows: Record<string, unknown>[];
-};
-
-export function buildInsertQuery(tableName: string, data: Record<string, unknown>) {
-  const columns = Object.keys(data);
-  const values = Object.values(data);
-  const placeholders = values.map((_, i) => `$${i + 1}`).join(', ');
-
-  return {
-    text: `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES (${placeholders}) RETURNING *`,
-    values,
-  };
-}
-
-export function buildUpdateQuery(
-  tableName: string,
-  id: number,
-  data: Record<string, unknown>,
-  idColumn: string = 'id'
-) {
-  const entries = Object.entries(data);
-  const setClause = entries.map(([key], i) => `${key} = $${i + 1}`).join(', ');
-  const values = [...Object.values(data), id];
-
-  return {
-    text: `UPDATE ${tableName} SET ${setClause} WHERE ${idColumn} = $${values.length} RETURNING *`,
-    values,
-  };
-}
-
-export async function executeQuery<T>(query: { text: string; values: unknown[] }): Promise<T> {
+// Utility function to fetch NFL win contract IDs
+export async function getNFLWinContracts(): Promise<NFLWinContract[]> {
   try {
-    const result = (await sql.query(query.text, query.values)) as unknown as QueryResult;
-    return result.rows[0] as unknown as T;
+    const result = await sql`
+        SELECT * FROM nfl_win_contract_ids_mv
+      `;
+    return result as NFLWinContract[];
   } catch (error) {
-    console.error('Database error:', error);
-    throw new Error('An error occurred while accessing the database');
+    handleDatabaseError(error);
+  }
+}
+
+// Function to fetch last trade prices for contracts
+export async function getLastTradePrices(): Promise<LastTradePrice[]> {
+  try {
+    const result = await sql`
+        SELECT * FROM last_trade_price_per_contract_view
+      `;
+    return result as LastTradePrice[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+// Function to fetch last 100 trade prices for a specific contract
+export async function getLastTradePricesX100(contractId: number): Promise<LastTradePrice100[]> {
+  try {
+    const result = await sql`
+        SELECT * FROM last_trade_prices_per_contract_x100_view
+        WHERE contract_id = ${contractId}
+        ORDER BY last_utc DESC
+      `;
+    return result as LastTradePrice100[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getLastTradePricesWith7DaysChange(): Promise<
+  LastTradePriceWith7DaysChange[]
+> {
+  try {
+    const result = await sql`
+      SELECT * FROM last_trade_prices_plus7d_change_view
+    `;
+    return result as LastTradePriceWith7DaysChange[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getContracts(): Promise<Contracts[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM contracts
+    `;
+    return result as Contracts[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getContractBuyOrders(contractId: number): Promise<ContractBuyOrder[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM contract_buy_orders
+      WHERE contract_id = ${contractId}
+    `;
+    return result as ContractBuyOrder[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getContractSellOrders(contractId: number): Promise<ContractSellOrder[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM contract_sell_orders
+      WHERE contract_id = ${contractId}
+    `;
+    return result as ContractSellOrder[];
+  } catch (error) {
+    handleDatabaseError(error);
   }
 }

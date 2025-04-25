@@ -92,3 +92,41 @@ export interface LogTest {
   message: string;
   log_datetime: Timestamp;
 }
+
+// Type for NFL win contracts
+export type NFLWinContract = {
+  contract_id: number;
+};
+
+// Type for last trade price data
+export type LastTradePrice = {
+  contract_id: number;
+  last_price: number;
+  last_volume: number;
+  last_utc: Date;
+};
+
+// Type for last 100 trade prices
+export type LastTradePrice100 = {
+  contract_id: number;
+  last_price: number;
+  last_volume: number;
+  last_utc: Date;
+};
+
+export type LastTradePriceWith7DaysChange = {
+  contract_id: number;
+  last_price: number;
+  last_volume: number;
+  last_utc: Date;
+  price_change_7d: number;
+  volume_7d: number;
+};
+
+export type Contracts = {
+  contract_id: number;
+  team_name: string;
+  abbreviation: string;
+  league: string;
+  measurable: string;
+};
