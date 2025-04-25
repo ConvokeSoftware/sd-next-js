@@ -10,6 +10,12 @@ import {
   User,
 } from './types';
 
+// Interface for open profit/loss sum calculation result
+export interface OpenProfitLossSum {
+  total_profit_loss: number;
+  // Add more fields as needed once we know the exact return type
+}
+
 // Utility function to fetch NFL win contract IDs
 export async function getNFLWinContracts(): Promise<NFLWinContract[]> {
   try {
@@ -102,6 +108,17 @@ export async function getAllUsers(): Promise<User[]> {
       SELECT * FROM users
     `;
     return result as User[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function calculateOpenProfitLossSum(userId: number): Promise<number> {
+  try {
+    const result = await sql`
+      SELECT calculate_open_profit_loss_sum(${userId})
+    `;
+    return result[0].calculate_open_profit_loss_sum;
   } catch (error) {
     handleDatabaseError(error);
   }

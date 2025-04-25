@@ -9,6 +9,7 @@ import {
   getContractBuyOrders,
   getContractSellOrders,
   getAllUsers,
+  calculateOpenProfitLossSum,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -54,4 +55,8 @@ export async function fetchContractSellOrders(contractId: number): Promise<Contr
 
 export async function fetchAllUsers(): Promise<User[]> {
   return await getAllUsers();
+}
+
+export async function fetchOpenProfitLossSum(userId: number): Promise<number> {
+  return await calculateOpenProfitLossSum(userId);
 }
