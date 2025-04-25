@@ -130,3 +130,11 @@ export type Contracts = {
   league: string;
   measurable: string;
 };
+
+export interface TradeHistory {
+  contract_id: number;
+  trade_time_block: string; // Format: "YYYY-MM-DD HH:MM:SS"
+  total_trades: number;
+  total_volume: number;
+  average_price: number;
+}

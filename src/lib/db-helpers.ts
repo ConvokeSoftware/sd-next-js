@@ -8,6 +8,7 @@ import {
   ContractBuyOrder,
   ContractSellOrder,
   User,
+  TradeHistory,
 } from './types';
 
 // Interface for open profit/loss sum calculation result
@@ -119,6 +120,20 @@ export async function calculateOpenProfitLossSum(userId: number): Promise<number
       SELECT calculate_open_profit_loss_sum(${userId})
     `;
     return result[0].calculate_open_profit_loss_sum;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getTradeHistoryForContract(
+  contractId: number,
+  interval: 'day' | 'week' | 'month' | 'year' = 'day'
+): Promise<TradeHistory[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM get_trades_history(${contractId}, ${interval})
+    `;
+    return result as TradeHistory[];
   } catch (error) {
     handleDatabaseError(error);
   }
