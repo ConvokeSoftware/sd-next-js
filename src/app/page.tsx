@@ -139,6 +139,7 @@ export default function Home() {
         {/* Main Content Column - Right Side */}
         <div className="col-span-9 space-y-4 overflow-y-auto">
           <SelectedContractDetails
+            selectedUserId={selectedUserId}
             contract={contracts[selectedContractId || 0]}
             selectedContractId={selectedContractId}
             lastTradePrices={lastTradePrices}

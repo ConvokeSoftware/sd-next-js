@@ -148,3 +148,13 @@ export interface GetSellOrdersSummary {
   price_asked: number;
   total_available_contracts: number;
 }
+
+export interface UserContractSummary {
+  contract_id: number;
+  net_contracts: number;
+  net_cashflow: number;
+  average_price_per_contract: number;
+  last_price: number;
+  current_value: number;
+  net_profit_loss: number;
+}

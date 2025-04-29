@@ -11,6 +11,7 @@ import {
   TradeHistory,
   GetBuyOrdersSummary,
   GetSellOrdersSummary,
+  UserContractSummary,
 } from './types';
 
 // Interface for open profit/loss sum calculation result
@@ -160,5 +161,21 @@ export async function getSellOrdersSummary(contractId: number): Promise<GetSellO
     return result as GetSellOrdersSummary[];
   } catch (error) {
     handleDatabaseError(error);
+  }
+}
+
+export async function getUserContractSummary(
+  userId: number,
+  contractId: number
+): Promise<UserContractSummary | null> {
+  try {
+    const result = await sql`
+      SELECT * FROM get_user_contract_summary(${userId}, ${contractId})
+    `;
+    console.log('result', result);
+    return (result[0] as UserContractSummary) || null;
+  } catch (error) {
+    handleDatabaseError(error);
+    return null;
   }
 }
