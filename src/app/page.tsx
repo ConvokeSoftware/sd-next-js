@@ -18,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function Page() {
   return (
@@ -40,6 +41,10 @@ export default function Page() {
                 <BreadcrumbSeparator className="hidden md:block" />
                 <BreadcrumbItem>
                   <BreadcrumbPage>League B</BreadcrumbPage>
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+                <BreadcrumbItem>
+                  <BreadcrumbPage>Selected Team X</BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -78,12 +83,58 @@ export default function Page() {
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
-            <div className="aspect-video rounded-xl bg-muted/50" />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1">
+            {/* Left Column - 1/3 width */}
+            <div className="md:col-span-1">
+              <div className="rounded-xl bg-muted/50 h-full p-4">
+                <h2 className="text-lg font-semibold mb-4">Contracts</h2>
+              </div>
+            </div>
+
+            {/* Right Column - 2/3 width */}
+            <div className="md:col-span-3 flex flex-col gap-4">
+              {/* Top Section - Graph */}
+              <div className="rounded-xl bg-muted/50 flex-1" />
+
+              {/* Bottom Section - Tabs */}
+              <div className="rounded-xl bg-muted/50">
+                <Tabs defaultValue="open-trades" className="w-full">
+                  <TabsList className="w-full justify-start">
+                    <TabsTrigger value="open-trades">Open Trades</TabsTrigger>
+                    <TabsTrigger value="closed-trades">Closed Trades</TabsTrigger>
+                    <TabsTrigger value="pending-orders">Pending Orders</TabsTrigger>
+                    <TabsTrigger value="summary">Summary</TabsTrigger>
+                    <TabsTrigger value="social">Social</TabsTrigger>
+                    <TabsTrigger value="news">News</TabsTrigger>
+                    <TabsTrigger value="calendar">Calendar</TabsTrigger>
+                  </TabsList>
+                  <div className="p-4">
+                    <TabsContent value="open-trades">
+                      <div className="h-48 rounded-lg bg-blue-100 dark:bg-blue-900/20" />
+                    </TabsContent>
+                    <TabsContent value="closed-trades">
+                      <div className="h-48 rounded-lg bg-green-100 dark:bg-green-900/20" />
+                    </TabsContent>
+                    <TabsContent value="pending-orders">
+                      <div className="h-48 rounded-lg bg-yellow-100 dark:bg-yellow-900/20" />
+                    </TabsContent>
+                    <TabsContent value="summary">
+                      <div className="h-48 rounded-lg bg-purple-100 dark:bg-purple-900/20" />
+                    </TabsContent>
+                    <TabsContent value="social">
+                      <div className="h-48 rounded-lg bg-pink-100 dark:bg-pink-900/20" />
+                    </TabsContent>
+                    <TabsContent value="news">
+                      <div className="h-48 rounded-lg bg-orange-100 dark:bg-orange-900/20" />
+                    </TabsContent>
+                    <TabsContent value="calendar">
+                      <div className="h-48 rounded-lg bg-red-100 dark:bg-red-900/20" />
+                    </TabsContent>
+                  </div>
+                </Tabs>
+              </div>
+            </div>
           </div>
-          <div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min" />
         </div>
       </SidebarInset>
     </SidebarProvider>
