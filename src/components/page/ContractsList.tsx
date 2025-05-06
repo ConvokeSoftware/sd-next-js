@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/card';
 import Image from 'next/image';
 import { Contracts, LastTradePrice, LastTradePrice100 } from '@/lib/types';
 import { useEffect, useState } from 'react';
-import { fetchLastTradePricesX100 } from '@/app/actions';
+import { fetchLastTradePricesX100 } from '@/actions/actions';
 import { Line, LineChart, ResponsiveContainer, YAxis, XAxis } from 'recharts';
 
 interface ContractsListProps {

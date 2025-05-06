@@ -3,7 +3,7 @@ import localFont from 'next/font/local';
 import './globals.css';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { GoogleTagManager } from '@next/third-parties/google';
-
+import { ThemeProvider } from '@/components/theme-provider';
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
   variable: '--font-geist-sans',
@@ -110,7 +110,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeProvider>
         <GoogleAnalytics gaId="G-XXXXXXXX" /> {/* Replace with your GA4 ID */}
         <GoogleTagManager gtmId="GTM-XXXXXXX" /> {/* Replace with your GTM ID */}
       </body>

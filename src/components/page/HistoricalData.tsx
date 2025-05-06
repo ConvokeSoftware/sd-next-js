@@ -13,7 +13,7 @@ import {
 } from 'recharts';
 import { CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { fetchTradeHistoryForContract } from '@/app/actions';
+import { fetchTradeHistoryForContract } from '@/actions/actions';
 
 interface HistoricalDataProps {
   isLoadingHistoricalData: boolean;

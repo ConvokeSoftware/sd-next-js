@@ -7,7 +7,7 @@ import {
   UserContractSummary,
 } from '@/lib/types';
 import { useEffect, useState } from 'react';
-import { fetchUserContractSummary } from '@/app/actions';
+import { fetchUserContractSummary } from '@/actions/actions';
 
 interface SelectedContractDetailsProps {
   selectedContractId: number | null;

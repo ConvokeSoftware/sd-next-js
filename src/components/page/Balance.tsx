@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui/card';
 import { User } from '@/lib/types';
 import { useEffect, useState } from 'react';
-import { fetchAllUsers, fetchOpenProfitLossSum } from '@/app/actions';
+import { fetchAllUsers, fetchOpenProfitLossSum } from '@/actions/actions';
 
 interface BalanceProps {
   selectedUserId: number;

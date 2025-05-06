@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import { executeBuyOrder, executeSellOrder } from '@/app/actions';
+import { executeBuyOrder, executeSellOrder } from '@/actions/actions';
 
 // Commented out imports for market orders and other features
 /*

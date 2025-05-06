@@ -15,7 +15,7 @@ import {
   fetchLastTradePrices,
   fetchLastTradePricesWith7DaysChange,
   fetchLastTradePricesX100,
-} from '../actions';
+} from '../../actions/actions';
 
 import { Balance } from '@/components/page/Balance';
 import { ContractsList } from '@/components/page/ContractsList';
