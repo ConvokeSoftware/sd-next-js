@@ -14,6 +14,11 @@ import {
   getBuyOrdersSummary,
   getSellOrdersSummary,
   getUserContractSummary,
+  executeNewBuyOrder,
+  executeNewSellOrder,
+  getUserByEmailAndPassword,
+  createUser as dbCreateUser,
+  setUserInitialSports as dbSetUserInitialSports,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -89,4 +94,34 @@ export async function fetchUserContractSummary(
   contractId: number
 ): Promise<UserContractSummary | null> {
   return await getUserContractSummary(userId, contractId);
+}
+
+export async function executeBuyOrder(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<boolean> {
+  return await executeNewBuyOrder(userId, contractId, price, contracts);
+}
+
+export async function executeSellOrder(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<boolean> {
+  return await executeNewSellOrder(userId, contractId, price, contracts);
+}
+
+export async function loginUser(email: string, password: string) {
+  return await getUserByEmailAndPassword(email, password);
+}
+
+export async function createUser(name: string, email: string, password: string) {
+  return await dbCreateUser(name, email, password);
+}
+
+export async function setUserInitialSports(userId: number, sports: string[]) {
+  return await dbSetUserInitialSports(userId, sports);
 }

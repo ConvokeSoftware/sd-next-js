@@ -176,6 +176,74 @@ export async function getUserContractSummary(
     return (result[0] as UserContractSummary) || null;
   } catch (error) {
     handleDatabaseError(error);
-    return null;
+  }
+}
+
+export async function executeNewBuyOrder(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT order_match_new_buy(${userId}, ${contractId}, ${price}, ${contracts})
+    `;
+    console.log('order_match_new_buy', result);
+    return result[0].order_match_new_buy;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function executeNewSellOrder(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<boolean> {
+  try {
+    const result = await sql`
+      SELECT order_match_new_sell(${userId}, ${contractId}, ${price}, ${contracts})
+    `;
+    console.log('order_match_new_sell', result);
+    return result[0].order_match_new_sell;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getUserByEmailAndPassword(email: string, password: string) {
+  try {
+    const result = await sql`
+      SELECT * FROM users WHERE email = ${email} AND password = ${password}
+    `;
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function createUser(name: string, email: string, password: string) {
+  try {
+    const result = await sql`
+      INSERT INTO users (name, email, password, balance)
+      VALUES (${name}, ${email}, ${password}, 100000.00)
+      RETURNING *
+    `;
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function setUserInitialSports(userId: number, sports: string[]) {
+  try {
+    const result = await sql`
+      UPDATE users SET "initialSports" = ${sports} WHERE user_id = ${userId} RETURNING *
+    `;
+    return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
   }
 }

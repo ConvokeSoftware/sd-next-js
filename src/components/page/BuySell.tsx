@@ -2,10 +2,15 @@
 
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { executeBuyOrder, executeSellOrder } from '@/app/actions';
+
+// Commented out imports for market orders and other features
+/*
+import { Switch } from '@/components/ui/switch';
+import { useEffect } from 'react';
 import { fetchBuyOrdersSummary, fetchSellOrdersSummary, fetchAllUsers } from '@/app/actions';
 import { GetBuyOrdersSummary, GetSellOrdersSummary } from '@/lib/types';
 import {
@@ -16,6 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+*/
 
 interface BuySellProps {
   className?: string;
@@ -23,23 +29,35 @@ interface BuySellProps {
   selectedUserId: number;
 }
 
+// Commented out interface for market orders
+/*
 interface OrderBreakdown {
   price: number;
   contracts: number;
 }
+*/
 
 export function BuySell({ className, contractId, selectedUserId }: BuySellProps) {
+  // Active states for limit orders
+  const [selectedAction, setSelectedAction] = useState<'BUY' | 'SELL'>('BUY');
+  const [price, setPrice] = useState<string>('');
+  const [contracts, setContracts] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Commented out states for market orders and other features
+  /*
   const [buyOrdersSummary, setBuyOrdersSummary] = useState<GetBuyOrdersSummary[]>([]);
   const [sellOrdersSummary, setSellOrdersSummary] = useState<GetSellOrdersSummary[]>([]);
   const [amount, setAmount] = useState<string>('0');
   const [maxTrade, setMaxTrade] = useState<number>(0);
   const [userBalance, setUserBalance] = useState<number>(0);
-  const [selectedAction, setSelectedAction] = useState<'BUY' | 'SELL'>('BUY');
   const [orderBreakdown, setOrderBreakdown] = useState<OrderBreakdown[]>([]);
   const [showTables, setShowTables] = useState(true);
   const [showBreakdown, setShowBreakdown] = useState(true);
+  */
 
-  // Fetch orders summary
+  // Commented out effects for market orders
+  /*
   useEffect(() => {
     const fetchData = async () => {
       const [buyOrders, sellOrders] = await Promise.all([
@@ -52,7 +70,6 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
     fetchData();
   }, [contractId]);
 
-  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       const users = await fetchAllUsers();
@@ -66,23 +83,17 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
     fetchUser();
   }, [selectedUserId]);
 
-  // Calculate max trade based on user balance and available orders
   useEffect(() => {
     if (selectedAction === 'BUY' && sellOrdersSummary.length > 0) {
-      // For buying, we look at sell orders (asks)
-      const availableOrders = sellOrdersSummary.sort((a, b) => a.price_asked - b.price_asked); // Sort by lowest price first
-
+      const availableOrders = sellOrdersSummary.sort((a, b) => a.price_asked - b.price_asked);
       let remainingBalance = userBalance;
       let totalContracts = 0;
       const breakdown: OrderBreakdown[] = [];
 
-      // Calculate how many contracts we can buy at each price level
       for (const order of availableOrders) {
         if (remainingBalance <= 0) break;
-
         const maxContractsAtThisPrice = Math.floor(remainingBalance / order.price_asked);
         const contractsToTake = Math.min(maxContractsAtThisPrice, order.total_available_contracts);
-
         if (contractsToTake > 0) {
           breakdown.push({
             price: order.price_asked,
@@ -92,24 +103,18 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
           remainingBalance -= contractsToTake * order.price_asked;
         }
       }
-
       setMaxTrade(totalContracts);
       setOrderBreakdown(breakdown);
     } else if (selectedAction === 'SELL' && buyOrdersSummary.length > 0) {
-      // For selling, we look at buy orders (bids)
-      const availableOrders = buyOrdersSummary.sort((a, b) => b.price_bid - a.price_bid); // Sort by highest price first
-
+      const availableOrders = buyOrdersSummary.sort((a, b) => b.price_bid - a.price_bid);
       let remainingBalance = userBalance;
       let totalContracts = 0;
       const breakdown: OrderBreakdown[] = [];
 
-      // Calculate how many contracts we can sell at each price level
       for (const order of availableOrders) {
         if (remainingBalance <= 0) break;
-
         const maxContractsAtThisPrice = Math.floor(remainingBalance / order.price_bid);
         const contractsToTake = Math.min(maxContractsAtThisPrice, order.total_available_contracts);
-
         if (contractsToTake > 0) {
           breakdown.push({
             price: order.price_bid,
@@ -119,7 +124,6 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
           remainingBalance -= contractsToTake * order.price_bid;
         }
       }
-
       setMaxTrade(totalContracts);
       setOrderBreakdown(breakdown);
     } else {
@@ -127,66 +131,98 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
       setOrderBreakdown([]);
     }
   }, [userBalance, buyOrdersSummary, sellOrdersSummary, selectedAction]);
+  */
 
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Remove any non-numeric characters
-    const value = e.target.value.replace(/[^\d]/g, '');
-    setAmount(value);
-  };
+  const handleTrade = async () => {
+    try {
+      setIsLoading(true);
+      if (!selectedUserId || !contractId || !price || !contracts) {
+        console.log('Please fill in all required fields');
+        return;
+      }
 
-  const setAmountWithValidation = (value: number) => {
-    // Ensure the amount doesn't exceed maxTrade
-    const validatedAmount = Math.min(value, maxTrade);
-    setAmount(validatedAmount.toString());
-  };
+      const priceNum = parseFloat(price);
+      const contractsNum = parseInt(contracts);
 
-  const handleTrade = () => {
-    const amountNum = parseInt(amount);
-    if (amountNum <= 0 || amountNum > maxTrade) {
-      console.log('Invalid amount');
-      return;
+      if (priceNum <= 0 || contractsNum <= 0) {
+        console.log('Price and contracts must be greater than 0');
+        return;
+      }
+
+      const success = await (selectedAction === 'BUY'
+        ? executeBuyOrder(selectedUserId, contractId, priceNum, contractsNum)
+        : executeSellOrder(selectedUserId, contractId, priceNum, contractsNum));
+
+      if (success) {
+        console.log(`${selectedAction} order placed successfully`);
+        setPrice('');
+        setContracts('');
+      } else {
+        console.log(`Failed to place ${selectedAction} order`);
+      }
+    } catch (error) {
+      console.error(`Error placing ${selectedAction} order:`, error);
+    } finally {
+      setIsLoading(false);
     }
-
-    const tradeDetails = {
-      userId: selectedUserId,
-      contractId: contractId,
-      action: selectedAction,
-      contracts: amountNum,
-      value:
-        amountNum *
-        (selectedAction === 'BUY'
-          ? sellOrdersSummary[0]?.price_asked
-          : buyOrdersSummary[0]?.price_bid),
-      price:
-        selectedAction === 'BUY'
-          ? sellOrdersSummary[0]?.price_asked
-          : buyOrdersSummary[0]?.price_bid,
-      balanceBefore: userBalance,
-      balanceAfter:
-        userBalance -
-        amountNum *
-          (selectedAction === 'BUY'
-            ? sellOrdersSummary[0]?.price_asked
-            : buyOrdersSummary[0]?.price_bid),
-      timestamp: new Date().toISOString(),
-      orderBreakdown: orderBreakdown,
-    };
-
-    console.log('Trade Details:', tradeDetails);
   };
 
   return (
-    <Card className={cn('p-4 space-y-2', className)}>
+    <Card className={cn('p-4 space-y-4', className)}>
       <div className="grid grid-cols-2 gap-4">
-        {/* Sell Side */}
+        <Button
+          variant={selectedAction === 'SELL' ? 'default' : 'outline'}
+          onClick={() => setSelectedAction('SELL')}
+        >
+          SELL
+        </Button>
+        <Button
+          variant={selectedAction === 'BUY' ? 'default' : 'outline'}
+          onClick={() => setSelectedAction('BUY')}
+        >
+          BUY
+        </Button>
+      </div>
+
+      <div className="space-y-4">
         <div>
-          <Button
-            variant={selectedAction === 'SELL' ? 'default' : 'outline'}
-            className="w-full mb-2"
-            onClick={() => setSelectedAction('SELL')}
-          >
-            SELL
-          </Button>
+          <label className="text-sm font-medium">Price:</label>
+          <Input
+            type="number"
+            min="0"
+            step="0.01"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            placeholder="Enter price"
+          />
+        </div>
+
+        <div>
+          <label className="text-sm font-medium">Contracts:</label>
+          <Input
+            type="number"
+            min="0"
+            step="1"
+            value={contracts}
+            onChange={(e) => setContracts(e.target.value)}
+            placeholder="Enter number of contracts"
+          />
+        </div>
+
+        <Button
+          className="w-full"
+          size="lg"
+          variant={selectedAction === 'BUY' ? 'default' : 'destructive'}
+          disabled={isLoading || !price || !contracts}
+          onClick={handleTrade}
+        >
+          {isLoading ? 'Processing...' : `Place ${selectedAction} Order`}
+        </Button>
+      </div>
+
+      {/* Commented out market order UI components
+      <div className="grid grid-cols-2 gap-4">
+        <div>
           {showTables && (
             <>
               <div>Sell Contracts</div>
@@ -219,15 +255,7 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
           )}
         </div>
 
-        {/* Buy Side */}
         <div>
-          <Button
-            variant={selectedAction === 'BUY' ? 'default' : 'outline'}
-            className="w-full mb-2"
-            onClick={() => setSelectedAction('BUY')}
-          >
-            BUY
-          </Button>
           {showTables && (
             <>
               <div>Buy Contracts</div>
@@ -261,7 +289,6 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
         </div>
       </div>
 
-      {/* Toggle Tables Button */}
       <Button
         variant="outline"
         size="sm"
@@ -271,121 +298,6 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
         {showTables ? 'Hide Order Tables' : 'Show Order Tables'}
       </Button>
 
-      {/* Amount Input */}
-      <div className="space-y-2 mt-4">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-center gap-2">
-            <div className="text-sm font-medium">Amount:</div>
-            <div className="flex-1">
-              <Input
-                type="number"
-                min="0"
-                max={maxTrade}
-                className="w-full"
-                value={amount}
-                onChange={handleAmountChange}
-              />
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => setAmountWithValidation(5)}
-            >
-              5
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => setAmountWithValidation(10)}
-            >
-              10
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => setAmountWithValidation(50)}
-            >
-              50
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => setAmountWithValidation(100)}
-            >
-              100
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              className="flex-1"
-              onClick={() => setAmountWithValidation(maxTrade)}
-            >
-              MAX
-            </Button>
-          </div>
-        </div>
-        {selectedAction === 'BUY' ? (
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full mt-2"
-              onClick={() => setShowBreakdown(!showBreakdown)}
-            >
-              {showBreakdown ? 'Hide Available Contracts' : 'Show Available Contracts'}
-            </Button>
-            {showBreakdown && (
-              <div className="text-sm text-blue-500">
-                You can buy a total of {maxTrade} contracts:
-                <span className="text-sm text-gray-500">
-                  Your balance: ${userBalance.toLocaleString()}
-                </span>
-                <div className="pl-2 mt-1">
-                  {orderBreakdown.map((level, index) => (
-                    <div key={index} className="text-gray-600">
-                      • {level.contracts} contracts at ${level.price}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full mt-2"
-              onClick={() => setShowBreakdown(!showBreakdown)}
-            >
-              {showBreakdown ? 'Hide Available Contracts' : 'Show Available Contracts'}
-            </Button>
-            {showBreakdown && (
-              <div className="text-sm text-blue-500">
-                You can sell a total of {maxTrade} contracts:
-                <span className="text-sm text-gray-500">
-                  Your balance: ${userBalance.toLocaleString()}
-                </span>
-                <div className="pl-2 mt-1">
-                  {orderBreakdown.map((level, index) => (
-                    <div key={index} className="text-gray-600">
-                      • {level.contracts} contracts at ${level.price}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </>
-        )}
-      </div>
-
-      {/* Stop Loss and Take Profit */}
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <div className="text-sm text-gray-500 font-medium">Stop Loss</div>
@@ -400,37 +312,7 @@ export function BuySell({ className, contractId, selectedUserId }: BuySellProps)
           <Switch disabled />
         </div>
       </div>
-
-      {/* Confirmation and Button */}
-      <div className="space-y-4 pt-4">
-        <div className="text-center text-sm">
-          You are about to {selectedAction.toLowerCase()} {amount} contracts for $
-          {(
-            parseFloat(amount) *
-              (selectedAction === 'BUY'
-                ? sellOrdersSummary[0]?.price_asked
-                : buyOrdersSummary[0]?.price_bid) || 0
-          ).toFixed(2)}
-          <br />
-          Balance after trade: $
-          {(
-            userBalance -
-            (parseFloat(amount) *
-              (selectedAction === 'BUY'
-                ? sellOrdersSummary[0]?.price_asked
-                : buyOrdersSummary[0]?.price_bid) || 0)
-          ).toFixed(2)}
-        </div>
-        <Button
-          className="w-full"
-          size="lg"
-          variant={selectedAction === 'BUY' ? 'default' : 'destructive'}
-          disabled={parseFloat(amount) > maxTrade || parseFloat(amount) <= 0}
-          onClick={handleTrade}
-        >
-          {selectedAction} NOW
-        </Button>
-      </div>
+      */}
     </Card>
   );
 }
