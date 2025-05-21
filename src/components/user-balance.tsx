@@ -1,5 +1,5 @@
 'use client';
-import { fetchAllUsers } from '@/actions/actions';
+import { fetchAllUsers, fetchUserOpenProfitLossTotal } from '@/actions/actions';
 import { User } from '@/lib/types';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -10,6 +10,7 @@ export function UserBalance() {
   const [users, setUsers] = useState<User[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [openProfitLoss, setOpenProfitLoss] = useState<number | null>(null);
 
   // Get userId from query param, or fallback to first user
   const userIdFromQuery = Number(searchParams.get('user'));
@@ -41,6 +42,19 @@ export function UserBalance() {
     }
   }, [users, userId]);
 
+  // Fetch open profit/loss when userId changes
+  useEffect(() => {
+    const loadOpenProfitLoss = async () => {
+      if (!userId) {
+        setOpenProfitLoss(null);
+        return;
+      }
+      const openProfitLossSum = await fetchUserOpenProfitLossTotal(userId);
+      setOpenProfitLoss(openProfitLossSum);
+    };
+    loadOpenProfitLoss();
+  }, [userId]);
+
   return (
     <div className="flex-1 flex justify-evenly items-center">
       <div className="text-sm">
@@ -49,9 +63,15 @@ export function UserBalance() {
           {isLoading ? '...' : user ? `$${user.balance}` : 'N/A'}
         </span>
       </div>
-      <div className="text-sm bg-red-200">
+      <div className="text-sm">
         <span className="text-muted-foreground">Open P/L:</span>
-        <span className="ml-1 font-medium text-green-500">C$8,709.45</span>
+        <span
+          className={`ml-1 font-medium ${openProfitLoss === null ? '' : openProfitLoss >= 0 ? 'text-green-600' : 'text-red-600'}`}
+        >
+          {openProfitLoss === null
+            ? '...'
+            : `$${openProfitLoss.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+        </span>
       </div>
       <div className="text-sm bg-red-200">
         <span className="text-muted-foreground">Equity:</span>

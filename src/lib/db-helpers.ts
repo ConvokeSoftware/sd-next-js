@@ -87,6 +87,8 @@ export async function getContractBuyOrders(contractId: number): Promise<Contract
     const result = await sql`
       SELECT * FROM contract_buy_orders
       WHERE contract_id = ${contractId}
+      AND contracts_available > 0
+      AND expiry_utc > NOW()
     `;
     return result as ContractBuyOrder[];
   } catch (error) {
@@ -99,6 +101,8 @@ export async function getContractSellOrders(contractId: number): Promise<Contrac
     const result = await sql`
       SELECT * FROM contract_sell_orders
       WHERE contract_id = ${contractId}
+      AND contracts_available > 0
+      AND expiry_utc > NOW()
     `;
     return result as ContractSellOrder[];
   } catch (error) {
@@ -243,6 +247,17 @@ export async function setUserInitialSports(userId: number, sports: string[]) {
       UPDATE users SET "initialSports" = ${sports} WHERE user_id = ${userId} RETURNING *
     `;
     return result[0] || null;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getUserOpenProfitLossTotal(userId: number): Promise<number> {
+  try {
+    const result = await sql`
+      SELECT get_user_open_profit_loss_total(${userId})
+    `;
+    return result[0].get_user_open_profit_loss_total;
   } catch (error) {
     handleDatabaseError(error);
   }

@@ -19,6 +19,7 @@ import {
   getUserByEmailAndPassword,
   createUser as dbCreateUser,
   setUserInitialSports as dbSetUserInitialSports,
+  getUserOpenProfitLossTotal,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -124,4 +125,8 @@ export async function createUser(name: string, email: string, password: string) 
 
 export async function setUserInitialSports(userId: number, sports: string[]) {
   return await dbSetUserInitialSports(userId, sports);
+}
+
+export async function fetchUserOpenProfitLossTotal(userId: number): Promise<number> {
+  return await getUserOpenProfitLossTotal(userId);
 }

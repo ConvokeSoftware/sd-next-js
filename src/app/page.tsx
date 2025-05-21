@@ -27,6 +27,8 @@ import { FakeNews } from '@/components/page/FakeNews';
 import { TeamCalendar } from '@/components/page/TeamCalendar';
 import { Suspense } from 'react';
 import { OrderBook } from '@/components/page/OrderBook';
+import { History } from '@/components/page/History';
+import { Positions } from '@/components/page/Positions';
 
 export default function Page() {
   return (
@@ -103,22 +105,20 @@ export default function Page() {
                       Positions
                     </TabsTrigger>
                     <TabsTrigger value="orders">Orders</TabsTrigger>
-                    <TabsTrigger className="text-red-400!" value="history">
-                      History
-                    </TabsTrigger>
+                    <TabsTrigger value="history">History</TabsTrigger>
                     <TabsTrigger value="social">Social</TabsTrigger>
                     <TabsTrigger value="news">News</TabsTrigger>
                     <TabsTrigger value="calendar">Calendar</TabsTrigger>
                   </TabsList>
                   <div className="p-4">
                     <TabsContent value="positions">
-                      <div className="h-48 rounded-lg bg-blue-100 dark:bg-blue-900/20" />
+                      <Positions />
                     </TabsContent>
                     <TabsContent value="orders">
                       <OrderBook />
                     </TabsContent>
                     <TabsContent value="history">
-                      <div className="h-48 rounded-lg bg-yellow-100 dark:bg-yellow-900/20" />
+                      <History />
                     </TabsContent>
                     <TabsContent value="social">
                       <SocialChat />
