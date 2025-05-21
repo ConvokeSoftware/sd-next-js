@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### [0.1.6](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.5...v0.1.6) (2025-05-21)
+
+### Features
+
+- update text colour ([3503d54](https://github.com/ConvokeSoftware/sd-next-js/commit/3503d542547faf425bac03b3d2ba1da0c2eb8f06))
+
 ### 0.1.5 (2025-05-21)
 
 ### Features
