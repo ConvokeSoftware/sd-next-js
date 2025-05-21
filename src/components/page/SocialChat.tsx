@@ -28,8 +28,8 @@ export function SocialChat() {
   };
 
   return (
-    <div className="flex flex-col h-48 overflow-y-auto bg-background rounded-lg border p-2">
-      <div className="flex-1 space-y-2 mb-2">
+    <div className="flex flex-col h-48 relative p-2">
+      <div className="flex-1 space-y-2 mb-2 overflow-y-auto">
         {messages.map((msg, i) => (
           <div key={i} className={msg.user === 'You' ? 'text-right' : 'text-left'}>
             <span

@@ -8,8 +8,8 @@ const fakeGames = [
 
 export function TeamCalendar() {
   return (
-    <div className="bg-background rounded-lg border p-4 h-48 overflow-y-auto">
-      <div className="font-bold text-lg mb-2">Upcoming Games</div>
+    <div className="p-4 h-48 overflow-y-auto">
+      <div className="font-bold text-md mb-2">Upcoming Games</div>
       <table className="w-full text-sm">
         <thead>
           <tr className="text-left text-muted-foreground">

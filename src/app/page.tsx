@@ -26,6 +26,7 @@ import { SocialChat } from '@/components/page/SocialChat';
 import { FakeNews } from '@/components/page/FakeNews';
 import { TeamCalendar } from '@/components/page/TeamCalendar';
 import { Suspense } from 'react';
+import { OrderBook } from '@/components/page/OrderBook';
 
 export default function Page() {
   return (
@@ -98,40 +99,26 @@ export default function Page() {
               <div className="rounded-xl bg-muted/50">
                 <Tabs defaultValue="open-trades" className="w-full">
                   <TabsList className="w-full justify-start">
-                    <TabsTrigger className="text-red-400!" value="open-trades">
-                      Open Trades
+                    <TabsTrigger className="text-red-400!" value="positions">
+                      Positions
                     </TabsTrigger>
-                    <TabsTrigger className="text-red-400" value="closed-trades">
-                      Closed Trades
-                    </TabsTrigger>
-                    <TabsTrigger className="text-red-400" value="pending-orders">
-                      Pending Orders
-                    </TabsTrigger>
-                    <TabsTrigger className="text-red-400" value="order-book">
-                      Order Book
-                    </TabsTrigger>
-                    <TabsTrigger className="text-red-400" value="summary">
-                      Summary
+                    <TabsTrigger value="orders">Orders</TabsTrigger>
+                    <TabsTrigger className="text-red-400!" value="history">
+                      History
                     </TabsTrigger>
                     <TabsTrigger value="social">Social</TabsTrigger>
                     <TabsTrigger value="news">News</TabsTrigger>
                     <TabsTrigger value="calendar">Calendar</TabsTrigger>
                   </TabsList>
                   <div className="p-4">
-                    <TabsContent value="open-trades">
+                    <TabsContent value="positions">
                       <div className="h-48 rounded-lg bg-blue-100 dark:bg-blue-900/20" />
                     </TabsContent>
-                    <TabsContent value="closed-trades">
-                      <div className="h-48 rounded-lg bg-green-100 dark:bg-green-900/20" />
+                    <TabsContent value="orders">
+                      <OrderBook />
                     </TabsContent>
-                    <TabsContent value="pending-orders">
+                    <TabsContent value="history">
                       <div className="h-48 rounded-lg bg-yellow-100 dark:bg-yellow-900/20" />
-                    </TabsContent>
-                    <TabsContent value="order-book">
-                      <div className="h-48 rounded-lg bg-red-100 dark:bg-red-900/20" />
-                    </TabsContent>
-                    <TabsContent value="summary">
-                      <div className="h-48 rounded-lg bg-purple-100 dark:bg-purple-900/20" />
                     </TabsContent>
                     <TabsContent value="social">
                       <SocialChat />
