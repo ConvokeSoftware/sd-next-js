@@ -1,3 +1,4 @@
+'use client';
 import { AppSidebar } from '@/components/app-sidebar';
 import {
   Breadcrumb,
@@ -7,7 +8,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
@@ -19,75 +19,73 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ContractsListV2 } from '@/components/page/ContractsListV2';
+import { TempUserControl } from '@/components/temp-usercontrol';
+import { UserBalance } from '@/components/user-balance';
+import { SocialChat } from '@/components/page/SocialChat';
+import { FakeNews } from '@/components/page/FakeNews';
+import { TeamCalendar } from '@/components/page/TeamCalendar';
+import { Suspense } from 'react';
 
 export default function Page() {
   return (
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Markets</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Sport A</BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>League B</BreadcrumbPage>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Selected Team X</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
-
-          {/* Right side header content */}
-          <div className="flex items-center gap-4 px-4">
-            <div className="hidden md:flex items-center gap-4">
-              <div className="text-sm">
-                <span className="text-muted-foreground">Balance:</span>
-                <span className="ml-1 font-medium">$10,000.00</span>
-              </div>
-              <div className="text-sm">
-                <span className="text-muted-foreground">Open P/L:</span>
-                <span className="ml-1 font-medium text-green-500">+$1,234.56</span>
-              </div>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                  <Avatar className="size-12">
-                    <AvatarImage src="/avatars/shadcn.jpg" alt="User" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Log out</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+        <header className="flex items-center h-16 px-4 gap-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+          <SidebarTrigger className="-ml-1" />
+          <Suspense fallback={null}>
+            <UserBalance />
+          </Suspense>
+          <Suspense fallback={null}>
+            <TempUserControl />
+          </Suspense>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <Avatar className="size-12">
+                  <AvatarImage src="https://source.unsplash.com/random/48x48?face" alt="User" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Profile</DropdownMenuItem>
+              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>Log out</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1">
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0 h-full min-h-0">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem className="hidden md:block">
+                <BreadcrumbLink href="#">Markets</BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>Football</BreadcrumbPage>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage>NFL</BreadcrumbPage>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator className="hidden md:block" />
+              <BreadcrumbItem>
+                <BreadcrumbPage> 2023 Season Total Wins (incl playoffs)</BreadcrumbPage>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 flex-1 h-full min-h-0">
             {/* Left Column - 1/3 width */}
-            <div className="md:col-span-1">
-              <div className="rounded-xl bg-muted/50 h-full p-4">
-                <h2 className="text-lg font-semibold mb-4">Contracts</h2>
+            <div className="md:col-span-1 flex flex-col h-full min-h-0">
+              <div className="rounded-xl bg-muted/50 p-2 flex flex-col h-full min-h-0 overflow-auto">
+                <Suspense fallback={null}>
+                  <ContractsListV2 />
+                </Suspense>
               </div>
             </div>
 
@@ -100,10 +98,21 @@ export default function Page() {
               <div className="rounded-xl bg-muted/50">
                 <Tabs defaultValue="open-trades" className="w-full">
                   <TabsList className="w-full justify-start">
-                    <TabsTrigger value="open-trades">Open Trades</TabsTrigger>
-                    <TabsTrigger value="closed-trades">Closed Trades</TabsTrigger>
-                    <TabsTrigger value="pending-orders">Pending Orders</TabsTrigger>
-                    <TabsTrigger value="summary">Summary</TabsTrigger>
+                    <TabsTrigger className="text-red-400!" value="open-trades">
+                      Open Trades
+                    </TabsTrigger>
+                    <TabsTrigger className="text-red-400" value="closed-trades">
+                      Closed Trades
+                    </TabsTrigger>
+                    <TabsTrigger className="text-red-400" value="pending-orders">
+                      Pending Orders
+                    </TabsTrigger>
+                    <TabsTrigger className="text-red-400" value="order-book">
+                      Order Book
+                    </TabsTrigger>
+                    <TabsTrigger className="text-red-400" value="summary">
+                      Summary
+                    </TabsTrigger>
                     <TabsTrigger value="social">Social</TabsTrigger>
                     <TabsTrigger value="news">News</TabsTrigger>
                     <TabsTrigger value="calendar">Calendar</TabsTrigger>
@@ -118,17 +127,20 @@ export default function Page() {
                     <TabsContent value="pending-orders">
                       <div className="h-48 rounded-lg bg-yellow-100 dark:bg-yellow-900/20" />
                     </TabsContent>
+                    <TabsContent value="order-book">
+                      <div className="h-48 rounded-lg bg-red-100 dark:bg-red-900/20" />
+                    </TabsContent>
                     <TabsContent value="summary">
                       <div className="h-48 rounded-lg bg-purple-100 dark:bg-purple-900/20" />
                     </TabsContent>
                     <TabsContent value="social">
-                      <div className="h-48 rounded-lg bg-pink-100 dark:bg-pink-900/20" />
+                      <SocialChat />
                     </TabsContent>
                     <TabsContent value="news">
-                      <div className="h-48 rounded-lg bg-orange-100 dark:bg-orange-900/20" />
+                      <FakeNews />
                     </TabsContent>
                     <TabsContent value="calendar">
-                      <div className="h-48 rounded-lg bg-red-100 dark:bg-red-900/20" />
+                      <TeamCalendar />
                     </TabsContent>
                   </div>
                 </Tabs>

@@ -47,7 +47,7 @@ const data = {
       icon: SquareTerminal,
       isActive: true,
       items: [
-        { title: 'Market 1', url: '#' },
+        { title: '2023 Season Total Wins (incl playoffs)', url: '#' },
         { title: 'Market 2', url: '#' },
         { title: 'Market 3', url: '#' },
         { title: 'Market 4', url: '#' },
