@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### [0.1.7](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.6...v0.1.7) (2025-05-21)
+
+### Features
+
+- updates ([c739f9f](https://github.com/ConvokeSoftware/sd-next-js/commit/c739f9fb2cb187231385bfcb0d5ee4c67db78d99))
+
 ### [0.1.6](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.5...v0.1.6) (2025-05-21)
 
 ### Features
