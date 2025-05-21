@@ -198,10 +198,10 @@ export function ContractsListV2() {
                         : 'border-zinc-300'
                     )}
                   >
-                    <button className="text-black px-2 py-1 rounded-md border-r border-inherit">
+                    <button className="text-primary px-2 py-1 rounded-md border-r border-inherit">
                       Buy
                     </button>
-                    <button className="text-black px-2 py-1 rounded-md">Sell</button>
+                    <button className="text-primary px-2 py-1 rounded-md">Sell</button>
                   </div>
                 </div>
               </div>
