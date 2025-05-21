@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+### 0.1.5 (2025-05-21)
+
+### Features
+
+- add spark chart and net contract data ([4092a85](https://github.com/ConvokeSoftware/sd-next-js/commit/4092a85ca80564dfe91c0be0ca8682dbf15afd62))
+- create base for the buy sell panel ([431f407](https://github.com/ConvokeSoftware/sd-next-js/commit/431f40770dec52d9f786d32651fa05fe9624f629))
+- create base login flow ([fdada66](https://github.com/ConvokeSoftware/sd-next-js/commit/fdada66d409e82bde97d89000bc758800c2b8980))
+- create base of the new layout ([d2e628f](https://github.com/ConvokeSoftware/sd-next-js/commit/d2e628f911db1d6df1e52db9b8d3ba3941bf27da))
+- create components, update selected and orders ([71be473](https://github.com/ConvokeSoftware/sd-next-js/commit/71be473ff75c0deba7f48bc8b4ec4fe58c390e72))
+- create new base layout with sidebar ([d5e0059](https://github.com/ConvokeSoftware/sd-next-js/commit/d5e00590724d39bcc10b42f9a406a82c693b0c3a))
+- setup project with db access and core layout ([816952c](https://github.com/ConvokeSoftware/sd-next-js/commit/816952c1cdbfb161c08ab8e1fbed11c39b630472))
+- show historical day data ([b31b53f](https://github.com/ConvokeSoftware/sd-next-js/commit/b31b53fb6f27374176dd5f54307c44eb7cfe5ec6))
+- show open profit loss for users ([32683ed](https://github.com/ConvokeSoftware/sd-next-js/commit/32683ed6f8379fdb10747990112be8166b93aa7f))
+- update contracts to show team data, display buy and sell orders ([3192f39](https://github.com/ConvokeSoftware/sd-next-js/commit/3192f396b47f09f4093555497c25b685d601f90c))
+- update page header ([fe6c69f](https://github.com/ConvokeSoftware/sd-next-js/commit/fe6c69f5758548c4bfafcb13a386e98f2886d106))
+- update tables and ([2c5a358](https://github.com/ConvokeSoftware/sd-next-js/commit/2c5a358cb7ad69015862f1c4e3a51677462b933f))
+
 ### [0.1.4](https://github.com/ConvokeSoftware/aotc/compare/v0.1.3...v0.1.4) (2025-01-26)
 
 ### Features
