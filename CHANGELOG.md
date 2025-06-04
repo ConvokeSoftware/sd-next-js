@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### [0.1.9](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.8...v0.1.9) (2025-06-04)
+
+### Features
+
+- update order book and contracts ([031f854](https://github.com/ConvokeSoftware/sd-next-js/commit/031f854d2848f8820a13d129f001bf3c88b46b54))
+
 ### [0.1.8](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.7...v0.1.8) (2025-05-21)
 
 ### Features
