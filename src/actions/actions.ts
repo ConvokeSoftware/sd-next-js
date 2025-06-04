@@ -20,6 +20,10 @@ import {
   createUser as dbCreateUser,
   setUserInitialSports as dbSetUserInitialSports,
   getUserOpenProfitLossTotal,
+  getContractTransactions,
+  getUserContractTransactions,
+  getBuyOrdersBestAvailPerContract,
+  getSellOrdersBestAvailPerContract,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -34,6 +38,9 @@ import {
   GetSellOrdersSummary,
   GetBuyOrdersSummary,
   UserContractSummary,
+  ContractTransaction,
+  BestBuyOrder,
+  BestSellOrder,
 } from '@/lib/types';
 
 export async function fetchNFLContracts(): Promise<NFLWinContract[]> {
@@ -129,4 +136,25 @@ export async function setUserInitialSports(userId: number, sports: string[]) {
 
 export async function fetchUserOpenProfitLossTotal(userId: number): Promise<number> {
   return await getUserOpenProfitLossTotal(userId);
+}
+
+export async function fetchContractTransactions(
+  contractId?: number
+): Promise<ContractTransaction[]> {
+  return await getContractTransactions(contractId);
+}
+
+export async function fetchUserContractTransactions(
+  userId: number,
+  contractId: number
+): Promise<ContractTransaction[]> {
+  return await getUserContractTransactions(userId, contractId);
+}
+
+export async function fetchBuyOrdersBestAvail(contractId: number): Promise<BestBuyOrder[]> {
+  return await getBuyOrdersBestAvailPerContract(contractId);
+}
+
+export async function fetchSellOrdersBestAvail(contractId: number): Promise<BestSellOrder[]> {
+  return await getSellOrdersBestAvailPerContract(contractId);
 }

@@ -58,7 +58,7 @@ export function UserBalance() {
   return (
     <div className="flex-1 flex justify-evenly items-center">
       <div className="text-sm">
-        <span className="text-muted-foreground">Balance:</span>
+        <span className="text-muted-foreground">Cash:</span>
         <span className="ml-1 font-medium">
           {isLoading ? '...' : user ? `$${user.balance}` : 'N/A'}
         </span>

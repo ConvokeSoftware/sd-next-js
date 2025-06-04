@@ -12,6 +12,9 @@ import {
   GetBuyOrdersSummary,
   GetSellOrdersSummary,
   UserContractSummary,
+  ContractTransaction,
+  BestBuyOrder,
+  BestSellOrder,
 } from './types';
 
 // Interface for open profit/loss sum calculation result
@@ -258,6 +261,61 @@ export async function getUserOpenProfitLossTotal(userId: number): Promise<number
       SELECT get_user_open_profit_loss_total(${userId})
     `;
     return result[0].get_user_open_profit_loss_total;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getContractTransactions(contractId?: number): Promise<ContractTransaction[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM contract_transactions
+      ${contractId ? sql`WHERE contract_id = ${contractId}` : sql``}
+      ORDER BY created_utc DESC
+      LIMIT 100
+    `;
+    return result as ContractTransaction[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getUserContractTransactions(
+  userId: number,
+  contractId: number
+): Promise<ContractTransaction[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM get_user_contract_transactions_per_contract(${userId}, ${contractId})
+      ORDER BY created_utc DESC
+    `;
+    return result as ContractTransaction[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getBuyOrdersBestAvailPerContract(
+  contractId: number
+): Promise<BestBuyOrder[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM get_buy_orders_best_avail_per_contract(${contractId})
+    `;
+    return result as BestBuyOrder[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function getSellOrdersBestAvailPerContract(
+  contractId: number
+): Promise<BestSellOrder[]> {
+  try {
+    const result = await sql`
+      SELECT * FROM get_sell_orders_best_avail_per_contract(${contractId})
+    `;
+    return result as BestSellOrder[];
   } catch (error) {
     handleDatabaseError(error);
   }

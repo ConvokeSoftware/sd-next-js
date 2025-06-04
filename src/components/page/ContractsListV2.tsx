@@ -19,7 +19,12 @@ import { ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 
-export function ContractsListV2() {
+export interface ContractsListV2Props {
+  onBuy?: (contract: Contracts) => void;
+  onSell?: (contract: Contracts) => void;
+}
+
+export function ContractsListV2({ onBuy, onSell }: ContractsListV2Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const selectedContractId = Number(searchParams.get('contract')) || null;
@@ -198,10 +203,24 @@ export function ContractsListV2() {
                         : 'border-zinc-300'
                     )}
                   >
-                    <button className="text-primary px-2 py-1 rounded-md border-r border-inherit">
+                    <button
+                      className="text-primary px-2 py-1 rounded-md border-r border-inherit"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onBuy) onBuy(contract);
+                      }}
+                    >
                       Buy
                     </button>
-                    <button className="text-primary px-2 py-1 rounded-md">Sell</button>
+                    <button
+                      className="text-primary px-2 py-1 rounded-md"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (onSell) onSell(contract);
+                      }}
+                    >
+                      Sell
+                    </button>
                   </div>
                 </div>
               </div>

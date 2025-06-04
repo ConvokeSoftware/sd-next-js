@@ -158,3 +158,13 @@ export interface UserContractSummary {
   current_value: number;
   net_profit_loss: number;
 }
+
+export interface BestBuyOrder {
+  price_bid: number;
+  total_available_contracts: number;
+}
+
+export interface BestSellOrder {
+  price_asked: number;
+  total_available_contracts: number;
+}
