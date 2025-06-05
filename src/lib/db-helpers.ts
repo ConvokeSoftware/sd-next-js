@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { sql, handleDatabaseError } from './db';
 import {
   NFLWinContract,
@@ -191,13 +192,19 @@ export async function executeNewBuyOrder(
   contractId: number,
   price: number,
   contracts: number
-): Promise<boolean> {
+): Promise<null> {
+  console.log('executeNewBuyOrder', userId, contractId, price, contracts);
   try {
     const result = await sql`
-      SELECT order_match_new_buy(${userId}, ${contractId}, ${price}, ${contracts})
+      CALL order_match_new_buy(
+        ${userId}::int4,
+        ${contractId}::int4,
+        ${price}::numeric,
+        ${contracts}::int4
+      )
     `;
-    console.log('order_match_new_buy', result);
-    return result[0].order_match_new_buy;
+    console.log('result', result);
+    return null;
   } catch (error) {
     handleDatabaseError(error);
   }
@@ -208,13 +215,18 @@ export async function executeNewSellOrder(
   contractId: number,
   price: number,
   contracts: number
-): Promise<boolean> {
+): Promise<null> {
   try {
     const result = await sql`
-      SELECT order_match_new_sell(${userId}, ${contractId}, ${price}, ${contracts})
+      CALL order_match_new_sell(
+        ${userId}::int4,
+        ${contractId}::int4,
+        ${price}::numeric,
+        ${contracts}::int4
+      )
     `;
-    console.log('order_match_new_sell', result);
-    return result[0].order_match_new_sell;
+    console.log('result', result);
+    return null;
   } catch (error) {
     handleDatabaseError(error);
   }
@@ -316,6 +328,48 @@ export async function getSellOrdersBestAvailPerContract(
       SELECT * FROM get_sell_orders_best_avail_per_contract(${contractId})
     `;
     return result as BestSellOrder[];
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function executeNewBuyOrderWithReport(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<any> {
+  try {
+    const result = await sql`
+      SELECT * FROM public.wrapper_order_match_buy(
+        ${userId}::int4,
+        ${contractId}::int4,
+        ${price}::numeric,
+        ${contracts}::int4
+      )
+    `;
+    return result;
+  } catch (error) {
+    handleDatabaseError(error);
+  }
+}
+
+export async function executeNewSellOrderWithReport(
+  userId: number,
+  contractId: number,
+  price: number,
+  contracts: number
+): Promise<any> {
+  try {
+    const result = await sql`
+      SELECT * FROM public.wrapper_order_match_sell(
+        ${userId}::int4,
+        ${contractId}::int4,
+        ${price}::numeric,
+        ${contracts}::int4
+      )
+    `;
+    return result;
   } catch (error) {
     handleDatabaseError(error);
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use server';
 
 import {
@@ -14,8 +15,6 @@ import {
   getBuyOrdersSummary,
   getSellOrdersSummary,
   getUserContractSummary,
-  executeNewBuyOrder,
-  executeNewSellOrder,
   getUserByEmailAndPassword,
   createUser as dbCreateUser,
   setUserInitialSports as dbSetUserInitialSports,
@@ -24,6 +23,8 @@ import {
   getUserContractTransactions,
   getBuyOrdersBestAvailPerContract,
   getSellOrdersBestAvailPerContract,
+  executeNewBuyOrderWithReport,
+  executeNewSellOrderWithReport,
 } from '@/lib/db-helpers';
 import {
   NFLWinContract,
@@ -109,8 +110,8 @@ export async function executeBuyOrder(
   contractId: number,
   price: number,
   contracts: number
-): Promise<boolean> {
-  return await executeNewBuyOrder(userId, contractId, price, contracts);
+): Promise<any> {
+  return await executeNewBuyOrderWithReport(userId, contractId, price, contracts);
 }
 
 export async function executeSellOrder(
@@ -118,8 +119,8 @@ export async function executeSellOrder(
   contractId: number,
   price: number,
   contracts: number
-): Promise<boolean> {
-  return await executeNewSellOrder(userId, contractId, price, contracts);
+): Promise<any> {
+  return await executeNewSellOrderWithReport(userId, contractId, price, contracts);
 }
 
 export async function loginUser(email: string, password: string) {

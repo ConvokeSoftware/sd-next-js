@@ -35,11 +35,15 @@ import { ContractTransactions } from '@/components/page/ContractTransactions';
 import { UserContractTransactions } from '@/components/page/UserContractTransactions';
 import { Contracts } from '@/lib/types';
 import { BestOrderBook } from '@/components/page/BestOrderBook';
+import { useSearchParams } from 'next/navigation';
 
 export function HomePageComponent() {
   const [sheetOpen, setSheetOpen] = useState(false);
   const [selectedContract, setSelectedContract] = useState<Contracts | null>(null);
   const [actionType, setActionType] = useState<'buy' | 'sell' | null>(null);
+  const searchParams = useSearchParams();
+  const userIdParam = searchParams.get('userId') || searchParams.get('user');
+  const userId = userIdParam ? parseInt(userIdParam) : null;
 
   const handleBuy = (contract: Contracts) => {
     setSelectedContract(contract);
@@ -179,6 +183,7 @@ export function HomePageComponent() {
             onOpenChange={setSheetOpen}
             contract={selectedContract}
             actionType={actionType}
+            userId={userId}
           />
         </SidebarInset>
       </SidebarProvider>

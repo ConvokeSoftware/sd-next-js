@@ -6,7 +6,7 @@ import {
   LastTradePrice100,
   LastTradePriceWith7DaysChange,
 } from '@/lib/types';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import {
   fetchContracts,
   fetchLastTradePrices,
@@ -106,129 +106,135 @@ export function ContractsListV2({ onBuy, onSell }: ContractsListV2Props) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col gap-0">
-        {isLoading ? (
-          <div className="text-center py-4">Loading Contracts...</div>
-        ) : contracts.length === 0 ? (
-          <div className="text-center py-4 text-gray-500">No contracts found</div>
-        ) : (
-          contracts.map((contract, idx) => (
-            <React.Fragment key={contract.contract_id}>
-              <div
-                className={cn(
-                  'flex flex-col gap-2 p-2 cursor-pointer transition-colors rounded-lg',
-                  selectedContractId === contract.contract_id && 'bg-blue-900/20'
-                )}
-                onClick={() => {
-                  const params = new URLSearchParams(Array.from(searchParams.entries()));
-                  params.set('contract', contract.contract_id.toString());
-                  router.replace(`?${params.toString()}`, { scroll: false });
-                }}
-              >
-                {/* Row 1: Name/Vol (left), Price/Percent (right) */}
-                <div className="flex items-start justify-between">
-                  <div className="flex flex-col">
-                    <span className="font-bold text-base truncate">{contract.team_name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      Vol: {lastTradePrices[contract.contract_id]?.last_volume || 0}
-                    </span>
-                  </div>
-                  <div className="flex flex-col items-end">
-                    <span className="font-bold text-base whitespace-nowrap">
-                      ${lastTradePrices[contract.contract_id]?.last_price || 0}
-                    </span>
-                    <span
-                      className={cn(
-                        'flex items-center gap-1 font-medium text-xs',
-                        (lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="flex flex-col h-full">
+        <div className="flex flex-col gap-0">
+          {isLoading ? (
+            <div className="text-center py-4">Loading Contracts...</div>
+          ) : contracts.length === 0 ? (
+            <div className="text-center py-4 text-gray-500">No contracts found</div>
+          ) : (
+            contracts.map((contract, idx) => (
+              <React.Fragment key={contract.contract_id}>
+                <div
+                  className={cn(
+                    'flex flex-col gap-2 p-2 cursor-pointer transition-colors rounded-lg',
+                    selectedContractId === contract.contract_id && 'bg-blue-900/20'
+                  )}
+                  onClick={() => {
+                    const params = new URLSearchParams(Array.from(searchParams.entries()));
+                    params.set('contract', contract.contract_id.toString());
+                    router.replace(`?${params.toString()}`, { scroll: false });
+                  }}
+                >
+                  {/* Row 1: Name/Vol (left), Price/Percent (right) */}
+                  <div className="flex items-start justify-between">
+                    <div className="flex flex-col">
+                      <span className="font-bold text-base truncate">{contract.team_name}</span>
+                      <span className="text-xs text-muted-foreground">
+                        Vol: {lastTradePrices[contract.contract_id]?.last_volume || 0}
+                      </span>
+                    </div>
+                    <div className="flex flex-col items-end">
+                      <span className="font-bold text-base whitespace-nowrap">
+                        ${lastTradePrices[contract.contract_id]?.last_price || 0}
+                      </span>
+                      <span
+                        className={cn(
+                          'flex items-center gap-1 font-medium text-xs',
+                          (lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
+                            0) > 0
+                            ? 'text-green-500'
+                            : (lastTradePricesWith7DaysChange[contract.contract_id]
+                                  ?.price_change_7d || 0) < 0
+                              ? 'text-red-500'
+                              : 'text-gray-400'
+                        )}
+                      >
+                        {(lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
+                          0) > 0 ? (
+                          <ArrowUpIcon className="h-3 w-3" />
+                        ) : (lastTradePricesWith7DaysChange[contract.contract_id]
+                            ?.price_change_7d || 0) < 0 ? (
+                          <ArrowDownIcon className="h-3 w-3" />
+                        ) : null}
+                        {(lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
                           0) > 0
-                          ? 'text-green-500'
-                          : (lastTradePricesWith7DaysChange[contract.contract_id]
-                                ?.price_change_7d || 0) < 0
-                            ? 'text-red-500'
-                            : 'text-gray-400'
+                          ? '+'
+                          : ''}
+                        {lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d || 0}
+                        %
+                      </span>
+                    </div>
+                  </div>
+                  {/* Row 2: Logo (left), Mini graph (right, flex-1) */}
+                  <div className="flex items-center gap-2">
+                    <img
+                      src={`/images/nfl_team_images/${contract.contract_id}.png`}
+                      alt={contract.abbreviation}
+                      className="w-10 h-10 object-contain rounded-full bg-black/10"
+                    />
+                    <div className="flex-1">
+                      {Array.isArray(tradePrices[contract.contract_id]) &&
+                        tradePrices[contract.contract_id].length > 0 && (
+                          <div className="w-full h-8">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart
+                                data={tradePrices[contract.contract_id].slice().reverse()}
+                                margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
+                              >
+                                <Line
+                                  type="monotone"
+                                  dataKey="last_price"
+                                  stroke="#3b82f6"
+                                  strokeWidth={2}
+                                  dot={false}
+                                />
+                                <YAxis
+                                  domain={getYDomain(tradePrices[contract.contract_id])}
+                                  hide
+                                />
+                                <XAxis hide />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
+                        )}
+                    </div>
+                    <div
+                      className={cn(
+                        'flex flex-row border rounded-md',
+                        selectedContractId === contract.contract_id
+                          ? 'border-white'
+                          : 'border-zinc-300'
                       )}
                     >
-                      {(lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
-                        0) > 0 ? (
-                        <ArrowUpIcon className="h-3 w-3" />
-                      ) : (lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
-                          0) < 0 ? (
-                        <ArrowDownIcon className="h-3 w-3" />
-                      ) : null}
-                      {(lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d ||
-                        0) > 0
-                        ? '+'
-                        : ''}
-                      {lastTradePricesWith7DaysChange[contract.contract_id]?.price_change_7d || 0}%
-                    </span>
+                      <button
+                        className="text-primary px-2 py-1 rounded-md border-r border-inherit"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onBuy) onBuy(contract);
+                        }}
+                      >
+                        Buy
+                      </button>
+                      <button
+                        className="text-primary px-2 py-1 rounded-md"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onSell) onSell(contract);
+                        }}
+                      >
+                        Sell
+                      </button>
+                    </div>
                   </div>
                 </div>
-                {/* Row 2: Logo (left), Mini graph (right, flex-1) */}
-                <div className="flex items-center gap-2">
-                  <img
-                    src={`/images/nfl_team_images/${contract.contract_id}.png`}
-                    alt={contract.abbreviation}
-                    className="w-10 h-10 object-contain rounded-full bg-black/10"
-                  />
-                  <div className="flex-1">
-                    {Array.isArray(tradePrices[contract.contract_id]) &&
-                      tradePrices[contract.contract_id].length > 0 && (
-                        <div className="w-full h-8">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <LineChart
-                              data={tradePrices[contract.contract_id].slice().reverse()}
-                              margin={{ top: 0, right: 0, left: 0, bottom: 0 }}
-                            >
-                              <Line
-                                type="monotone"
-                                dataKey="last_price"
-                                stroke="#3b82f6"
-                                strokeWidth={2}
-                                dot={false}
-                              />
-                              <YAxis domain={getYDomain(tradePrices[contract.contract_id])} hide />
-                              <XAxis hide />
-                            </LineChart>
-                          </ResponsiveContainer>
-                        </div>
-                      )}
-                  </div>
-                  <div
-                    className={cn(
-                      'flex flex-row border rounded-md',
-                      selectedContractId === contract.contract_id
-                        ? 'border-white'
-                        : 'border-zinc-300'
-                    )}
-                  >
-                    <button
-                      className="text-primary px-2 py-1 rounded-md border-r border-inherit"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onBuy) onBuy(contract);
-                      }}
-                    >
-                      Buy
-                    </button>
-                    <button
-                      className="text-primary px-2 py-1 rounded-md"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (onSell) onSell(contract);
-                      }}
-                    >
-                      Sell
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {idx < contracts.length - 1 && <div className="border-b border-zinc-300 my-1" />}
-            </React.Fragment>
-          ))
-        )}
+                {idx < contracts.length - 1 && <div className="border-b border-zinc-300 my-1" />}
+              </React.Fragment>
+            ))
+          )}
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }

@@ -1,5 +1,10 @@
 import HomePageComponent from '@/components/page/HomePageComponent';
+import { Suspense } from 'react';
 
 export default function Page() {
-  return <HomePageComponent />;
+  return (
+    <Suspense fallback={null}>
+      <HomePageComponent />
+    </Suspense>
+  );
 }
