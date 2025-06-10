@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+### [0.1.11](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.10...v0.1.11) (2025-06-10)
+
+### Features
+
+- update the buy/sell sheet ([d106c66](https://github.com/ConvokeSoftware/sd-next-js/commit/d106c6663b6635f8b826bd890587c6f2527e2852))
+
 ### [0.1.10](https://github.com/ConvokeSoftware/sd-next-js/compare/v0.1.9...v0.1.10) (2025-06-05)
 
 ### Features
