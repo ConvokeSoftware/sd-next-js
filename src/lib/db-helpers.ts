@@ -200,7 +200,8 @@ export async function executeNewBuyOrder(
         ${userId}::int4,
         ${contractId}::int4,
         ${price}::numeric,
-        ${contracts}::int4
+        ${contracts}::int4,
+        null
       )
     `;
     console.log('result', result);
@@ -222,7 +223,8 @@ export async function executeNewSellOrder(
         ${userId}::int4,
         ${contractId}::int4,
         ${price}::numeric,
-        ${contracts}::int4
+        ${contracts}::int4,
+        null
       )
     `;
     console.log('result', result);
